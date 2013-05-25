@@ -30,6 +30,8 @@ exports.startServer = (config, callback) ->
   # Redirect api requests (*all* HTTP verbs) to the Cloud
   apiProxy = new httpProxy.RoutingProxy
   app.all '/api/*', (req, res) ->
+    console.log req.originalUrl
+    req.url = req.url.replace "/api", ''
     apiProxy.proxyRequest req, res,
       host: 'localhost'
       port: 3333
