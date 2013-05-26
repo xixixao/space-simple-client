@@ -1,15 +1,16 @@
 Utilities.
 
-    define ['jquery'], ($) ->
+    define ['jquery', 'vendor/jsonformatter', 'vendor/moment'], ($) ->
 
 Utility to display output without opening the console (and also there).
 
       log = (label, data...) ->
-        printout = "<h1>#{label}<h4>#{timeStamp()}</h4></h1>"
         for name, i in data by 2
-          printout += "<p><b>#{name}</b></p>"
-          printout += "<p>#{data[i + 1]}</p>"
-        $('body').prepend printout
+          json = {}
+          json[name] = data[i + 1]
+          JSONFormatter.format json, prepend: true
+        $('body').prepend timeStamp $("<h4></h4>")
+        $('body').prepend "<h1>#{label}</h1>"
 
         console.log label
         for d in data
@@ -17,12 +18,14 @@ Utility to display output without opening the console (and also there).
 
 Textual representation of current time.
 
-      timeStamp = ->
-        date = new Date
-        ms = date.getMilliseconds()
-        ms = Array(4-String(ms).length).join('0') + ms
-        "#{date.getHours()}:#{date.getMinutes()}:#{date.getSeconds()}.#{ms}"
-
+      timeStamp = ($t) ->
+        stamp = moment()
+        formatted = stamp.format 'hh:mm:ss.SSS'
+        display = ->
+          $t.html "#{formatted}, #{stamp.fromNow()}"
+        setInterval display, 30000
+        display()
+        $t
 
 Export:
 

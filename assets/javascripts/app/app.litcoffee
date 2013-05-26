@@ -11,6 +11,8 @@ Verify that proxy is established to our Cloud server.
 
         $.get '/api/server-check', (data, status) ->
           log "Server check", "status", status, "data", data
+        .fail (error) ->
+          log "Server check", "error", error
 
 Try post with some data.
 
