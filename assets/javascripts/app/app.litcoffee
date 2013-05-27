@@ -75,9 +75,50 @@ Try post with some data.
             log "Error getting a course", "error", error
         .fail (error) ->
           log "Error signup course", "error", error
+--------------------
+
+        file =
+          name: "testFile"
+          _id: "testFile1" 
+          path: "/home/app"
+          owner: "testOwer"
+
+        $.post '/api/files', file, (data, status) ->
+          log "File Check", "status", status, "data", data
+        .fail (error) ->
+          log "File error", error
+
+-----
+
+        question =
+          _id: "testQ1" 
+          owner: "testOwner"
+          filePosition: "100"
 
 
-------
+        $.post '/api/questions', question, (data, status) ->
+          log "Question Check", "status", status, "data", data
+        .fail (error) ->
+          log "question error", error
+
+---------
+
+        feed =
+          _id: "testFeed1" 
+          owner: "testOwner"
+
+        $.post '/api/feeds', feed, (data, status) ->
+          log "Feed Check", "status", status, "data", data
+        .fail (error) ->
+          log "Feed error", error
+
+
+
+
+
+
+
+
 
         
           
