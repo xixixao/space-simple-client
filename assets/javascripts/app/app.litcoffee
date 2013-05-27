@@ -26,9 +26,9 @@ Try post with some data.
 
         user =
           name: "test"
-          username: "test3" 
+          _id: "test3" 
           password: "testing"
-          courses: ["51a36fe7661b35241f000002"]
+          courses: ["51a36fe7661b35241f000002","51a36fe7661b35241f000003"]
 
 ------  
 
@@ -47,7 +47,7 @@ Try post with some data.
         
         user1 =
           name: "test"
-          username: "test3" 
+          _id: "test3" 
           password: "testing1"
 
 ------
@@ -61,7 +61,7 @@ Try post with some data.
 
         course =
           name: "NAC"
-          code: "212"
+          _id: "212"
 
 ------  
 
