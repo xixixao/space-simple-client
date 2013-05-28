@@ -1,6 +1,6 @@
 Utilities.
 
-    define ['jquery', 'vendor/jsonformatter', 'vendor/moment'], ($) ->
+    define ['jquery', 'vendor/js-dump', 'vendor/moment'], ($, Dump) ->
 
 Utility to display output without opening the console (and also there).
 
@@ -8,8 +8,7 @@ Utility to display output without opening the console (and also there).
         for name, i in data by 2
           json = {}
           json[name] = data[i + 1]
-          #JSONFormatter.format json, prepend: true
-          console.log json
+          $('body').prepend "<pre>#{Dump.parse json}</pre>"
         $('body').prepend timeStamp $("<h4></h4>")
         $('body').prepend "<h1>#{label}</h1>"
 
