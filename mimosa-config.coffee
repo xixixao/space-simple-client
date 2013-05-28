@@ -152,15 +152,15 @@ exports.config = {
                                  # root of the project. If defaultServer.enabled is false it is
                                  # relative to the server.path setting above.	
 
-  # require:                 # configuration for requirejs options.
+  require:                 # configuration for requirejs options.
     # commonConfig: "common" # The path from 'javascriptDir' to the location of common requirejs
                              # config. This is config shared across multiple requirejs modules.
                              # The should be or a requirejs.config({}) function call. Defaults
                              # to a file named `common` in the root of the javascriptDir. Does
                              # not need to exist, so can be left alone if a commonConfig is not
                              # being used.
-    # verify:                # settings for requirejs path verification
-      # enabled: true        # Whether or not to perform verification
+    verify:                # settings for requirejs path verification
+      enabled: false        # Whether or not to perform verification
     # optimize :
       # inferConfig:true     # Mimosa figures out all you'd need for a simple r.js optimizer run.
                              # If you rather Mimosa not do that, set inferConfig to false and
