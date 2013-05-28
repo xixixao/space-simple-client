@@ -39,22 +39,22 @@ Adds a cours for a user check
           _id: "test3" 
           password: "testing"
           courses: [
-            code: "51a36fe7661b35241f000002"
+            code: "212"
             permission: 'w'
-          ,
-            code: "51a36fe7661b35241f000003"
-            permission: 'r'
           ]
 
         $.post '/api/users', user, (data, status) ->
           log "Signup Check", "status", status, "data", data
           $.post '/api/users', user, (data, status) ->
             log "Duplicate Check", "status", status, "data", data
-          $.get '/api/users/test3', (data, status) ->
-            log "Getting a user", "status", status, "data", data
-
-          $.post '/api/users/test3', user, (data, status) ->
-            log "Adding a course", "status", status, "data", data
+          # $.post '/api/users/test3', user, (data, status) ->
+          #   log "Adding a course", "status", status, "data", data
+          $.post '/api/files', file, (data, status) ->
+            log "File Check", "status", status, "data", data
+            $.get '/api/users/test3', (data, status) ->
+              log "Getting a user", "status", status, "data", data
+            .fail (error) ->
+              log "Error getting a user", "error", error
         .fail (error) ->
           log "Signup", "error", error
 
@@ -101,19 +101,19 @@ Adding questions for a file check
 
         file =
           name: "file"
-          _id: "testFile" 
+          _id: "testFile1" 
           path: "/home/app"
           owner: "test3"
-          course: "NAC"
+          course: "212"
 
-        $.post '/api/files', file, (data, status) ->
-          log "File Check", "status", status, "data", data
-          $.get '/api/files/testFile1', (data, status) ->
-            log "Getting a file", "status", status, "data", data
-          .fail (error) ->
-            log "Getting a file error", error 
-        .fail (error) ->
-          log "File error", error
+        # $.post '/api/files', file, (data, status) ->
+        #   log "File Check", "status", status, "data", data
+        #   $.get '/api/files/testFile1', (data, status) ->
+        #     log "Getting a file", "status", status, "data", data
+        #   .fail (error) ->
+        #     log "Getting a file error", error 
+        # .fail (error) ->
+        #   log "File error", error
      
 ------------------------------------
 Adding a question
