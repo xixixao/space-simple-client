@@ -38,7 +38,13 @@ Adds a cours for a user check
           name: "test"
           _id: "test3" 
           password: "testing"
-          courses: ["51a36fe7661b35241f000002","51a36fe7661b35241f000003"]
+          courses: [
+            code: "51a36fe7661b35241f000002"
+            permission: 'w'
+          ,
+            code: "51a36fe7661b35241f000003"
+            permission: 'r'
+          ]
 
         $.post '/api/users', user, (data, status) ->
           log "Signup Check", "status", status, "data", data
