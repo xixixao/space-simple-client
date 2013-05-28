@@ -27,19 +27,18 @@ Server check
         $.post '/api/server-check', "data", (data, status) ->
           log "Server check for POST", "status", status, "data", data
 
-        user =
-          name: "test"
-          _id: "test3" 
-          password: "testing"
-          courses: ["51a36fe7661b35241f000002","51a36fe7661b35241f000003"]
-
-
 -----------------------------
 Signup check
 Check for duplicate users
 Gets a user check
 Adds a cours for a user check
 -----------------------------
+
+        user =
+          name: "test"
+          _id: "test3" 
+          password: "testing"
+          courses: ["51a36fe7661b35241f000002","51a36fe7661b35241f000003"]
 
         $.post '/api/users', user, (data, status) ->
           log "Signup Check", "status", status, "data", data
@@ -53,15 +52,14 @@ Adds a cours for a user check
         .fail (error) ->
           log "Signup", "error", error
 
-        
+------------------------------
+Checking that a user can login
+------------------------------
+
         user1 =
           name: "test"
           _id: "test3" 
           password: "testing1"
-
-------------------------------
-Checking that a user can login
-------------------------------
 
         $.post '/api/login', user1, (data, status) ->
           log "Login", "status", status, "data", data
@@ -87,7 +85,7 @@ Getting a course check
             log "Error getting a course", "error", error
         .fail (error) ->
           log "Error signup course", "error", error
-		###
+		
 
 ---------------------------------
 Adding a file
@@ -116,6 +114,7 @@ Adding a comment to the questions check
           _id: "testQ1" 
           owner: "testOwner"
           filePosition: "100"
+          file: "File1"
 
 
         $.post '/api/questions', question, (data, status) ->
