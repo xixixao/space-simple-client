@@ -117,7 +117,6 @@ Adding questions for a file check
 ------------------------------------
 Adding a question
 Getting a question check
-Adding a comment to the questions check
 ------------------------------------
 
         question =
@@ -133,27 +132,69 @@ Adding a comment to the questions check
           .fail (error) ->
             log "Getting a question error", error
         .fail (error) ->
-          log "question error", error
+          log "Question error", error
 
------------------------
-Adding a comment
-Getting a comment check
------------------------
+
+------------------------------------
+Adding an answer
+Getting an answer check
+------------------------------------
+
+        answer =
+          _id: "A1" 
+          owner: "testOwner"
+          question: "Q1"
+          rank: 5 
+
+
+        $.post '/api/answers', answer, (data, status) ->
+          log "Answer Check", "status", status, "data", data
+          $.get '/api/answers/A1', (data, status) ->
+            log "Getting an answer", "status", status, "data", data
+          .fail (error) ->
+            log "Getting an answer error", error
+        .fail (error) ->
+          log "Answer error", error
+
+
+---------------------------------------
+Adding a comment to a question
+Getting a comment from a question check
+---------------------------------------
 
         comment =
           _id: "testcomment1" 
           owner: "testOwnerComment"
           question: "Question?"
 
-        $.post '/api/comments', comment, (data, status) ->
-          log "Comment Check", "status", status, "data", data
-          $.get '/api/comments/testcomment1', comment, (data, status) ->
-            log "Getting a comment", "status", status, "data", data
+        $.post '/api/commentsQ', comment, (data, status) ->
+          log "Comment Q Check", "status", status, "data", data
+          $.get '/api/commentsQ/testcomment1', (data, status) ->
+            log "Getting a comment from a question", "status", status, "data", data
           .fail (error) ->
-            log "Getting a comment error", error
+            log "Getting a comment error from a question", error
         .fail (error) ->
-          log "Comment error", error
+          log "Comment Q error", error
 
+
+---------------------------------------
+Adding a comment to an answer
+Getting a comment from an answer check
+---------------------------------------
+
+        comment2 =
+          _id: "testcomment2" 
+          owner: "testOwnerComment"
+          answer: "answer"
+
+        $.post '/api/commentsA', comment2, (data, status) ->
+          log "Comment A Check", "status", status, "data", data
+          $.get '/api/commentsA/testcomment2', (data, status) ->
+            log "Getting a comment from an answer", "status", status, "data", data
+          .fail (error) ->
+            log "Getting a comment from an answer error", error
+        .fail (error) ->
+          log "Comment A error", error
 
 
 
