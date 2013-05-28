@@ -18,7 +18,8 @@ Verify that proxy is established to our Cloud server.
           log "Server check", "error", error
 
 Try post with some data.
-
+		
+		
 ------------
 Server check
 ------------
@@ -82,10 +83,11 @@ Getting a course check
           #   log "Duplicate Check", "status", status, "data", data
           $.get '/api/courses/212', (data, status) ->
             log "Getting a course", "status", status, "data", data
-           .fail (error) ->
+          .fail (error) ->
             log "Error getting a course", "error", error
         .fail (error) ->
           log "Error signup course", "error", error
+		###
 
 ---------------------------------
 Adding a file
@@ -107,7 +109,7 @@ Adding questions for a file check
 ------------------------------------
 Adding a question
 Getting a question check
-Adding a feed to the questions check
+Adding a comment to the questions check
 ------------------------------------
 
         question =
@@ -121,19 +123,19 @@ Adding a feed to the questions check
         .fail (error) ->
           log "question error", error
 
---------------------
-Adding a feed
-Getting a feed check
---------------------
+-----------------------
+Adding a comment
+Getting a comment check
+-----------------------
 
-        feed =
-          _id: "testFeed1" 
+        comment =
+          _id: "testcomment1" 
           owner: "testOwner"
 
-        $.post '/api/feeds', feed, (data, status) ->
-          log "Feed Check", "status", status, "data", data
+        $.post '/api/comments', comment, (data, status) ->
+          log "Comment Check", "status", status, "data", data
         .fail (error) ->
-          log "Feed error", error
+          log "Comment error", error
 
 
 
