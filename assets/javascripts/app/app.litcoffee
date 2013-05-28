@@ -101,9 +101,10 @@ Adding questions for a file check
 
         file =
           name: "file"
-          _id: "testFile1" 
+          _id: "testFile" 
           path: "/home/app"
           owner: "test3"
+          course: "NAC"
 
         $.post '/api/files', file, (data, status) ->
           log "File Check", "status", status, "data", data
