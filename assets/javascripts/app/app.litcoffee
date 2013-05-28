@@ -18,8 +18,8 @@ Verify that proxy is established to our Cloud server.
           log "Server check", "error", error
 
 Try post with some data.
-		
-		
+    
+    
 ------------
 Server check
 ------------
@@ -85,7 +85,7 @@ Getting a course check
             log "Error getting a course", "error", error
         .fail (error) ->
           log "Error signup course", "error", error
-		
+      
 
 ---------------------------------
 Adding a file
@@ -94,16 +94,20 @@ Adding questions for a file check
 ---------------------------------
 
         file =
-          name: "testFile"
+          name: "file"
           _id: "testFile1" 
           path: "/home/app"
-          owner: "testOwer"
+          owner: "test3"
 
         $.post '/api/files', file, (data, status) ->
           log "File Check", "status", status, "data", data
+          $.get '/api/files/testFile1', (data, status) ->
+            log "Getting a file", "status", status, "data", data
+          .fail (error) ->
+            log "Getting a file error", error 
         .fail (error) ->
           log "File error", error
-
+     
 ------------------------------------
 Adding a question
 Getting a question check
@@ -111,14 +115,17 @@ Adding a comment to the questions check
 ------------------------------------
 
         question =
-          _id: "testQ1" 
+          _id: "Q1" 
           owner: "testOwner"
           filePosition: "100"
           file: "File1"
 
-
         $.post '/api/questions', question, (data, status) ->
           log "Question Check", "status", status, "data", data
+          $.get '/api/questions/Q1', (data, status) ->
+            log "Getting a question", "status", status, "data", data
+          .fail (error) ->
+            log "Getting a question error", error
         .fail (error) ->
           log "question error", error
 
@@ -129,10 +136,15 @@ Getting a comment check
 
         comment =
           _id: "testcomment1" 
-          owner: "testOwner"
+          owner: "testOwnerComment"
+          question: "Question?"
 
         $.post '/api/comments', comment, (data, status) ->
           log "Comment Check", "status", status, "data", data
+          $.get '/api/comments/testcomment1', comment, (data, status) ->
+            log "Getting a comment", "status", status, "data", data
+          .fail (error) ->
+            log "Getting a comment error", error
         .fail (error) ->
           log "Comment error", error
 
