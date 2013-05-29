@@ -38,7 +38,7 @@ Adds a cours for a user check
           name: "test"
           _id: "test3" 
           password: "testing"
-          courses: [
+          topics: [
             code: "212"
             permission: 'w'
           ]
@@ -48,7 +48,7 @@ Adds a cours for a user check
           $.post '/api/users', user, (data, status) ->
             log "Duplicate Check", "status", status, "data", data
           # $.post '/api/users/test3', user, (data, status) ->
-          #   log "Adding a course", "status", status, "data", data
+          #   log "Adding a topic", "status", status, "data", data
           $.post '/api/files', file, (data, status) ->
             log "File Check", "status", status, "data", data
             $.get '/api/users/test3', (data, status) ->
@@ -73,24 +73,24 @@ Checking that a user can login
           log "Error login", "error", error
 
 ----------------------
-Adding a course check
-Getting a course check
+Adding a topic check
+Getting a topic check
 ----------------------
 
-        course =
+        topic =
           name: "NAC"
           _id: "212"
 
-        $.post '/api/courses', course, (data, status) ->
-          log "Signup Course Check", "status", status, "data", data
+        $.post '/api/topics', topic, (data, status) ->
+          log "Signup topic Check", "status", status, "data", data
           # $.post '/api/users', user, (data, status) ->
           #   log "Duplicate Check", "status", status, "data", data
-          $.get '/api/courses/212', (data, status) ->
-            log "Getting a course", "status", status, "data", data
+          $.get '/api/topics/212', (data, status) ->
+            log "Getting a topic", "status", status, "data", data
           .fail (error) ->
-            log "Error getting a course", "error", error
+            log "Error getting a topic", "error", error
         .fail (error) ->
-          log "Error signup course", "error", error
+          log "Error signup topic", "error", error
       
 
 ---------------------------------
@@ -104,7 +104,7 @@ Adding questions for a file check
           _id: "testFile1" 
           path: "/home/app"
           owner: "test3"
-          course: "212"
+          topic: "212"
 
         # $.post '/api/files', file, (data, status) ->
         #   log "File Check", "status", status, "data", data
