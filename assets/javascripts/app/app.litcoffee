@@ -31,7 +31,7 @@ Server check
 Signup check
 Check for duplicate users
 Gets a user check
-Adds a cours for a user check
+Adds a course for a user check
 -----------------------------
 
         user =
@@ -67,8 +67,11 @@ Checking that a user can login
           _id: "test3" 
           password: "testing1"
 
-        $.post '/api/login', user1, (data, status) ->
+        $.post '/api/login', user, (data, status) ->
           log "Login", "status", status, "data", data
+          $.post '/api/topics', {name: "laasa", _id:"sadsad"}, (data, status) ->
+            log "sadsa", "status", status, "data", data
+
         .fail (error) ->
           log "Error login", "error", error
 
@@ -199,8 +202,7 @@ Getting a comment from an answer check
 
 
 
-
-
+      
 
 
 
