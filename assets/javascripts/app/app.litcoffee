@@ -64,6 +64,13 @@ Adds a course for a user check
               log "Getting feeds for a user", "status", status, "data", data
             .fail (error) ->
               log "Error getting feeds for a user", "error", error
+          $.post '/api/login', user, (data, status) ->
+            log "Login", "status", status, "data", data
+            $.post '/api/topics', {name: "laasa", _id:"sadsad"}, (data, status) ->
+              log "sadsa", "status", status, "data", data
+
+          .fail (error) ->
+            log "Error login", "error", error
         .fail (error) ->
           log "Signup", "error", error
 
@@ -76,13 +83,6 @@ Checking that a user can login
           _id: "test3" 
           password: "testing1"
 
-        $.post '/api/login', user, (data, status) ->
-          log "Login", "status", status, "data", data
-          $.post '/api/topics', {name: "laasa", _id:"sadsad"}, (data, status) ->
-            log "sadsa", "status", status, "data", data
-
-        .fail (error) ->
-          log "Error login", "error", error
 
 ----------------------
 Adding a topic check
