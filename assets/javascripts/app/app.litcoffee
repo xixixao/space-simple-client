@@ -43,6 +43,7 @@ Adds a cours for a user check
             permission: 'w'
           ]
 
+
         $.post '/api/users', user, (data, status) ->
           log "Signup Check", "status", status, "data", data
           $.post '/api/users', user, (data, status) ->
@@ -51,10 +52,18 @@ Adds a cours for a user check
           #   log "Adding a topic", "status", status, "data", data
           $.post '/api/files', file, (data, status) ->
             log "File Check", "status", status, "data", data
-            $.get '/api/users/test3', (data, status) ->
-              log "Getting a user", "status", status, "data", data
+            $.post '/api/questions', question2, (data, status) ->
+              log "Question Check", "status", status, "data", data
+              $.get '/api/users/test3', (data, status) ->
+                log "Getting a user", "status", status, "data", data
+              .fail (error) ->
+                log "Error getting a user", "error", error
+            $.post '/api/questions', question, (data, status) ->
+              log "Question Check", "status", status, "data", data
+            $.get '/api/feeds/test3', (data, status) ->
+              log "Getting feeds for a user", "status", status, "data", data
             .fail (error) ->
-              log "Error getting a user", "error", error
+              log "Error getting feeds for a user", "error", error
         .fail (error) ->
           log "Signup", "error", error
 
@@ -101,10 +110,10 @@ Adding questions for a file check
 
         file =
           name: "file"
-          _id: "testFile1" 
+          _id: "File1" 
           path: "/home/app"
           owner: "test3"
-          topic: "212"
+          topicCode: "212"
 
         # $.post '/api/files', file, (data, status) ->
         #   log "File Check", "status", status, "data", data
@@ -126,14 +135,20 @@ Getting a question check
           filePosition: "100"
           file: "File1"
 
-        $.post '/api/questions', question, (data, status) ->
-          log "Question Check", "status", status, "data", data
-          $.get '/api/questions/Q1', (data, status) ->
-            log "Getting a question", "status", status, "data", data
-          .fail (error) ->
-            log "Getting a question error", error
-        .fail (error) ->
-          log "Question error", error
+        question2 =
+          _id: "Q2" 
+          owner: "testOwner2"
+          filePosition: "100"
+          file: "File1"
+
+        # $.post '/api/questions', question, (data, status) ->
+        #   log "Question Check", "status", status, "data", data
+        #   $.get '/api/questions/Q1', (data, status) ->
+        #     log "Getting a question", "status", status, "data", data
+        #   .fail (error) ->
+        #     log "Getting a question error", error
+        # .fail (error) ->
+        #   log "Question error", error
 
 
 ------------------------------------
