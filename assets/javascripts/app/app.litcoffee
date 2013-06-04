@@ -1,7 +1,9 @@
+Client
+======
 
 Uses jQuery to make simple requests to our Cloud api.
 
-    define ['jquery', './utilities'], ($, {log}) ->
+    define ['jquery', './utilities'], ($, {log, note, blame}) ->
 
       $.put = (url, data, success) ->
         $.ajax {url, data, success}
@@ -10,31 +12,24 @@ Code will be executed after document has loaded.
 
       $ ->
 
-Verify that proxy is established to our Cloud server.
-
-        $.get '/api/server-check', (data, status) ->
-          log "Server check", "status", status, "data", data
-        .fail (error) ->
-          log "Server check", "error", error
-
-Try post with some data.
-    
-    
-------------
 Server check
 ------------
 
-        $.post '/api/server-check', "data", (data, status) ->
-          log "Server check for POST", "status", status, "data", data
+Verify that proxy is established to our Cloud server.
 
------------------------------
+        note "Server check", $.get '/api/server-check'
+
+
+Try post with some data.
+
+        note "Server check for POST", $.post '/api/server-check', "data"
+
 Signup check
-Check for duplicate users
-Gets a user check
-Adds a cours for a user check
------------------------------
+------------
 
-        user =
+First we need to sign a user up.
+
+        testUser =
           name: "test"
           _id: "test3" 
           password: "testing"
@@ -43,55 +38,61 @@ Adds a cours for a user check
             permission: 'w'
           ]
 
-        $.post '/api/users', user, (data, status) ->
-          log "Signup Check", "status", status, "data", data
-          $.post '/api/users', user, (data, status) ->
-            log "Duplicate Check", "status", status, "data", data
+        userAdded = $.post '/api/users', testUser
+        note "Signup Check", userAdded
+
+We then check that we can't make a duplicate sign up.
+
+        note "Duplicate Check", userAdded.then ->
+          $.post '/api/users', testUser
+
           # $.post '/api/users/test3', user, (data, status) ->
           #   log "Adding a topic", "status", status, "data", data
-          $.post '/api/files', file, (data, status) ->
-            log "File Check", "status", status, "data", data
-            $.get '/api/users/test3', (data, status) ->
-              log "Getting a user", "status", status, "data", data
-            .fail (error) ->
-              log "Error getting a user", "error", error
-        .fail (error) ->
-          log "Signup", "error", error
 
-------------------------------
-Checking that a user can login
-------------------------------
+Login check
+-----------
 
-        user1 =
-          name: "test"
+Checking that a user can login.
+
+        userLoggedIn = userAdded.then ->
+          $.post '/api/login', testUser
+
+        note "Log in", userLoggedIn
+
+Checking that a user that's not signed up cannot log in.
+
+        badUser =
+          name: "rogue"
           _id: "test3" 
-          password: "testing1"
+          password: "backstab"
 
-        $.post '/api/login', user1, (data, status) ->
-          log "Login", "status", status, "data", data
-        .fail (error) ->
-          log "Error login", "error", error
+        blame "Invalid user", userAdded.then ->
+          $.post '/api/login', badUser
 
-----------------------
+Checking that user must have a correct password.
+
+        forgetfulTestUser = $.extend {}, testUser
+        forgetfulTestUser.password = "rubish"
+
+        blame "Invalid password", userAdded.then ->
+          $.post '/api/login', forgetfulTestUser
+
+Topics
+------
+
 Adding a topic check
-Getting a topic check
-----------------------
 
         topic =
           name: "NAC"
           _id: "212"
 
-        $.post '/api/topics', topic, (data, status) ->
-          log "Signup topic Check", "status", status, "data", data
-          # $.post '/api/users', user, (data, status) ->
-          #   log "Duplicate Check", "status", status, "data", data
-          $.get '/api/topics/212', (data, status) ->
-            log "Getting a topic", "status", status, "data", data
-          .fail (error) ->
-            log "Error getting a topic", "error", error
-        .fail (error) ->
-          log "Error signup topic", "error", error
-      
+        topicAdded = $.post '/api/topics', topic
+        note "Topic addition", topicAdded
+
+Getting a topic check
+
+        note "Getting a topic", topicAdded.then ->
+          $.get '/api/topics/212'
 
 ---------------------------------
 Adding a file
@@ -105,6 +106,9 @@ Adding questions for a file check
           path: "/home/app"
           owner: "test3"
           topic: "212"
+
+        #$.post '/api/files', file, (data, status) ->
+        #  log "File Check", "status", status, "data", data
 
         # $.post '/api/files', file, (data, status) ->
         #   log "File Check", "status", status, "data", data
