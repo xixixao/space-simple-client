@@ -78,7 +78,7 @@ Checking that user must have a correct password.
           $.post '/api/login', forgetfulTestUser
 
 Topics
-------
+-------
 
 Adding a topic check
 
@@ -106,6 +106,12 @@ Adding questions for a file check
           path: "/home/app"
           owner: "test3"
           topic: "212"
+        
+        fileAdded = $.post '/api/files', file
+        note "File added", fileAdded
+
+        note "Getting a file", fileAdded.then ->
+          $.get '/api/files/testFile1'
 
         #$.post '/api/files', file, (data, status) ->
         #  log "File Check", "status", status, "data", data
@@ -130,14 +136,20 @@ Getting a question check
           filePosition: "100"
           file: "File1"
 
-        $.post '/api/questions', question, (data, status) ->
-          log "Question Check", "status", status, "data", data
-          $.get '/api/questions/Q1', (data, status) ->
-            log "Getting a question", "status", status, "data", data
-          .fail (error) ->
-            log "Getting a question error", error
-        .fail (error) ->
-          log "Question error", error
+        questionAdded = $.post '/api/questions', question
+        note "Question Check", questionAdded
+
+        note "Getting a question", questionAdded.then ->
+          $.get '/api/questions/Q1'
+
+        #$.post '/api/questions', question, (data, status) ->
+        #  log "Question Check", "status", status, "data", data
+        #  $.get '/api/questions/Q1', (data, status) ->
+        #   log "Getting a question", "status", status, "data", data
+        #  .fail (error) ->
+        #    log "Getting a question error", error
+        #.fail (error) ->
+        #  log "Question error", error
 
 
 ------------------------------------
@@ -151,15 +163,21 @@ Getting an answer check
           question: "Q1"
           rank: 5 
 
+        answerAdded = $.post '/api/answers', answer
+        note "Answer Check", answerAdded
+        
+        note "Getting an answer", answerAdded.then ->
+          $.get '/api/answers/A1'
 
-        $.post '/api/answers', answer, (data, status) ->
-          log "Answer Check", "status", status, "data", data
-          $.get '/api/answers/A1', (data, status) ->
-            log "Getting an answer", "status", status, "data", data
-          .fail (error) ->
-            log "Getting an answer error", error
-        .fail (error) ->
-          log "Answer error", error
+
+        #$.post '/api/answers', answer, (data, status) ->
+        #  log "Answer Check", "status", status, "data", data
+        #  $.get '/api/answers/A1', (data, status) ->
+        #    log "Getting an answer", "status", status, "data", data
+        #  .fail (error) ->
+        #    log "Getting an answer error", error
+        #.fail (error) ->
+        #  log "Answer error", error
 
 
 ---------------------------------------
@@ -167,19 +185,25 @@ Adding a comment to a question
 Getting a comment from a question check
 ---------------------------------------
 
-        comment =
+        commentQ =
           _id: "testcomment1" 
           owner: "testOwnerComment"
           question: "Question?"
 
-        $.post '/api/commentsQ', comment, (data, status) ->
-          log "Comment Q Check", "status", status, "data", data
-          $.get '/api/commentsQ/testcomment1', (data, status) ->
-            log "Getting a comment from a question", "status", status, "data", data
-          .fail (error) ->
-            log "Getting a comment error from a question", error
-        .fail (error) ->
-          log "Comment Q error", error
+        commentQAdded = $.post '/api/commentsQ', commentQ
+        note "Comment Q Check", commentQAdded
+        
+        note "Getting a comment from a question", commentQAdded.then ->
+          $.get '/api/commentsQ/testcomment1'
+
+        #$.post '/api/commentsQ', comment, (data, status) ->
+        #  log "Comment Q Check", "status", status, "data", data
+        #  $.get '/api/commentsQ/testcomment1', (data, status) ->
+        #    log "Getting a comment from a question", "status", status, "data", data
+        #  .fail (error) ->
+        #    log "Getting a comment error from a question", error
+        #.fail (error) ->
+        #  log "Comment Q error", error
 
 
 ---------------------------------------
@@ -187,20 +211,31 @@ Adding a comment to an answer
 Getting a comment from an answer check
 ---------------------------------------
 
-        comment2 =
+        commentA =
           _id: "testcomment2" 
           owner: "testOwnerComment"
           answer: "answer"
 
-        $.post '/api/commentsA', comment2, (data, status) ->
-          log "Comment A Check", "status", status, "data", data
-          $.get '/api/commentsA/testcomment2', (data, status) ->
-            log "Getting a comment from an answer", "status", status, "data", data
-          .fail (error) ->
-            log "Getting a comment from an answer error", error
-        .fail (error) ->
-          log "Comment A error", error
+        commentAAdded = $.post '/api/commentsA', commentA
+        note "Comment A Check", commentAAdded
+        
+        note "Getting a comment from an answer", commentAAdded.then ->
+          $.get '/api/commentsA/testcomment2'
 
+        #$.post '/api/commentsA', comment2, (data, status) ->
+        #  log "Comment A Check", "status", status, "data", data
+        #  $.get '/api/commentsA/testcomment2', (data, status) ->
+        #    log "Getting a comment from an answer", "status", status, "data", data
+        #  .fail (error) ->
+        #    log "Getting a comment from an answer error", error
+        #.fail (error) ->
+        #  log "Comment A error", error
+
+Feed
+----
+
+Check for list of questions and files
+      
 
 
 
