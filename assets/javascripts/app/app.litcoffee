@@ -248,7 +248,7 @@ We then check if we can get a comment from an answer
         note "Getting a comment from an answer", commentAAdded.then ->
           $.get '/api/commentsA/testcomment2'
 
-Feed
+
 ----
 
 Check for list of questions and files
@@ -269,9 +269,11 @@ Check for list of questions and files
         note "Feed check", $.when(questionAdded, question2Added).then ->
           $.get '/api/feeds/test3'
       
+Events
+------
 
-
-
+        note "Event list", fileAdded.then ->
+          $.get '/api/events'
 
 
 
