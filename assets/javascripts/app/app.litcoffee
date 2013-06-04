@@ -24,6 +24,9 @@ Try post with some data.
 
         note "Server check for POST", $.post '/api/server-check', "data"
 
+API Checking
+============
+
 Signup check
 ------------
 
@@ -52,13 +55,6 @@ We then check that we can't make a duplicate sign up.
 Login check
 -----------
 
-Checking that a user can login.
-
-        userLoggedIn = userAdded.then ->
-          $.post '/api/login', testUser
-
-        note "Log in", userLoggedIn
-
 Checking that a user that's not signed up cannot log in.
 
         badUser =
@@ -66,16 +62,23 @@ Checking that a user that's not signed up cannot log in.
           _id: "test3" 
           password: "backstab"
 
-        blame "Invalid user", userAdded.then ->
-          $.post '/api/login', badUser
+        #blame "Invalid user", userAdded.then ->
+        #  $.post '/api/login', badUser
 
 Checking that user must have a correct password.
 
         forgetfulTestUser = $.extend {}, testUser
         forgetfulTestUser.password = "rubish"
 
-        blame "Invalid password", userAdded.then ->
-          $.post '/api/login', forgetfulTestUser
+        #blame "Invalid password", userAdded.then ->
+        #  $.post '/api/login', forgetfulTestUser
+
+Checking that a user can login (this must be the last login so that we can use it later).
+
+        userLoggedIn = userAdded.then ->
+          $.post '/api/login', testUser
+
+        note "Log in", userLoggedIn
 
 Topics
 -------
@@ -131,7 +134,7 @@ If the user is logged in then he can add a file
 We then check if we can get a file
 
         note "Getting a file", fileAdded.then ->
-          $.get '/api/files/testFile1'
+          $.get '/api/files/File1'
 
 Also check that we cannot add a file to someone elses topic
 
@@ -141,12 +144,9 @@ Also check that we cannot add a file to someone elses topic
           path: "/home/app"
           owner: "test3"
           topicCode: "reallyWrong"
-        
-        fileAdded = $.when(userLoggedIn, topicAdded).then ->
+
+        blame "File permission", $.when(userLoggedIn, topicAdded).then ->
           $.post '/api/files', badFile
-        blame "File permission", fileAdded
-
-
 
 Question
 --------
