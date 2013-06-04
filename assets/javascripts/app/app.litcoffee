@@ -102,10 +102,10 @@ Adding questions for a file check
 
         file =
           name: "file"
-          _id: "testFile1" 
+          _id: "File1" 
           path: "/home/app"
           owner: "test3"
-          topic: "212"
+          topicCode: "212"
         
         fileAdded = $.post '/api/files', file
         note "File added", fileAdded
@@ -135,6 +135,9 @@ Getting a question check
           owner: "testOwner"
           filePosition: "100"
           file: "File1"
+          text: "question 1"
+
+
 
         questionAdded = $.post '/api/questions', question
         note "Question Check", questionAdded
@@ -162,6 +165,7 @@ Getting an answer check
           owner: "testOwner"
           question: "Q1"
           rank: 5 
+          text: "Answer 1"
 
         answerAdded = $.post '/api/answers', answer
         note "Answer Check", answerAdded
@@ -188,7 +192,8 @@ Getting a comment from a question check
         commentQ =
           _id: "testcomment1" 
           owner: "testOwnerComment"
-          question: "Question?"
+          question: "Q1"
+          text: "comment Q"
 
         commentQAdded = $.post '/api/commentsQ', commentQ
         note "Comment Q Check", commentQAdded
@@ -214,7 +219,8 @@ Getting a comment from an answer check
         commentA =
           _id: "testcomment2" 
           owner: "testOwnerComment"
-          answer: "answer"
+          answer: "A1"
+          text: "comment A"
 
         commentAAdded = $.post '/api/commentsA', commentA
         note "Comment A Check", commentAAdded
@@ -235,6 +241,22 @@ Feed
 ----
 
 Check for list of questions and files
+
+        question2 =
+          _id: "Q2" 
+          owner: "testOwner"
+          filePosition: "100"
+          file: "File1"
+          text: "question 2"
+        
+        question2Added = $.post '/api/questions', question2
+        note "Question 2 Check", question2Added
+
+        note "Getting question 2", question2Added.then ->
+          $.get '/api/questions/Q2'
+
+        note "Feed check", $.when(questionAdded, question2Added).then ->
+          $.get '/api/feeds/test3'
       
 
 
