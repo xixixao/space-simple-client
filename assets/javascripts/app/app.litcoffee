@@ -111,11 +111,10 @@ Getting a topic check
         note "Getting a topic", topicAdded.then ->
           $.get '/api/topics/212'
 
----------------------------------
-Adding a file
-Getting a file check
-Adding questions for a file check
----------------------------------
+File
+----
+
+If the user is logged in then he can add a file
 
         file =
           name: "file"
@@ -124,10 +123,8 @@ Adding questions for a file check
           owner: "test3"
           topicCode: "212"
         
-If the user is logged in then he can add a file
-
-        fileAdded = userAdded.then ->
-            $.post '/api/files', file
+        fileAdded = $.when(userLoggedIn, topicAdded).then ->
+          $.post '/api/files', file
         note "File added", fileAdded
 
 
@@ -136,22 +133,26 @@ We then check if we can get a file
         note "Getting a file", fileAdded.then ->
           $.get '/api/files/testFile1'
 
-        #$.post '/api/files', file, (data, status) ->
-        #  log "File Check", "status", status, "data", data
+Also check that we cannot add a file to someone elses topic
 
-        # $.post '/api/files', file, (data, status) ->
-        #   log "File Check", "status", status, "data", data
-        #   $.get '/api/files/testFile1', (data, status) ->
-        #     log "Getting a file", "status", status, "data", data
-        #   .fail (error) ->
-        #     log "Getting a file error", error 
-        # .fail (error) ->
-        #   log "File error", error
-     
-------------------------------------
+        badFile =
+          name: "file"
+          _id: "rougeFile" 
+          path: "/home/app"
+          owner: "test3"
+          topicCode: "reallyWrong"
+        
+        fileAdded = $.when(userLoggedIn, topicAdded).then ->
+          $.post '/api/files', badFile
+        blame "File permission", fileAdded
+
+
+
+Question
+--------
+
 Adding a question
 Getting a question check
-------------------------------------
 
         question =
           _id: "Q1" 
@@ -161,22 +162,14 @@ Getting a question check
 
 We add a question
 
-        questionAdded = $.post '/api/questions', question
+        questionAdded = fileAdded.then -> 
+          $.post '/api/questions', question
         note "Question Check", questionAdded
 
 We then check if we can get a question
 
         note "Getting a question", questionAdded.then ->
           $.get '/api/questions/Q1'
-
-        #$.post '/api/questions', question, (data, status) ->
-        #  log "Question Check", "status", status, "data", data
-        #  $.get '/api/questions/Q1', (data, status) ->
-        #   log "Getting a question", "status", status, "data", data
-        #  .fail (error) ->
-        #    log "Getting a question error", error
-        #.fail (error) ->
-        #  log "Question error", error
 
 
 ------------------------------------
@@ -193,7 +186,8 @@ Getting an answer check
 We add an answer
 
 
-        answerAdded = $.post '/api/answers', answer
+        answerAdded = questionAdded.then ->
+          $.post '/api/answers', answer
         note "Answer Check", answerAdded
 
 We then check if we can get an answer
@@ -201,16 +195,6 @@ We then check if we can get an answer
         
         note "Getting an answer", answerAdded.then ->
           $.get '/api/answers/A1'
-
-
-        #$.post '/api/answers', answer, (data, status) ->
-        #  log "Answer Check", "status", status, "data", data
-        #  $.get '/api/answers/A1', (data, status) ->
-        #    log "Getting an answer", "status", status, "data", data
-        #  .fail (error) ->
-        #    log "Getting an answer error", error
-        #.fail (error) ->
-        #  log "Answer error", error
 
 
 ---------------------------------------
@@ -225,7 +209,8 @@ Getting a comment from a question check
 
 We add a comment for a question
 
-        commentQAdded = $.post '/api/commentsQ', commentQ
+        commentQAdded = questionAdded.then ->
+          $.post '/api/commentsQ', commentQ
         note "Comment Q Check", commentQAdded
         
 We then check if we can get a comment from a question
@@ -233,16 +218,6 @@ We then check if we can get a comment from a question
 
         note "Getting a comment from a question", commentQAdded.then ->
           $.get '/api/commentsQ/testcomment1'
-
-        #$.post '/api/commentsQ', comment, (data, status) ->
-        #  log "Comment Q Check", "status", status, "data", data
-        #  $.get '/api/commentsQ/testcomment1', (data, status) ->
-        #    log "Getting a comment from a question", "status", status, "data", data
-        #  .fail (error) ->
-        #    log "Getting a comment error from a question", error
-        #.fail (error) ->
-        #  log "Comment Q error", error
-
 
 ---------------------------------------
 Adding a comment to an answer
@@ -256,7 +231,8 @@ Getting a comment from an answer check
 
 We add a comment for an answer
 
-        commentAAdded = $.post '/api/commentsA', commentA
+        commentAAdded = answerAdded.then ->
+          $.post '/api/commentsA', commentA
         note "Comment A Check", commentAAdded
         
 
@@ -265,15 +241,6 @@ We then check if we can get a comment from an answer
 
         note "Getting a comment from an answer", commentAAdded.then ->
           $.get '/api/commentsA/testcomment2'
-
-        #$.post '/api/commentsA', comment2, (data, status) ->
-        #  log "Comment A Check", "status", status, "data", data
-        #  $.get '/api/commentsA/testcomment2', (data, status) ->
-        #    log "Getting a comment from an answer", "status", status, "data", data
-        #  .fail (error) ->
-        #    log "Getting a comment from an answer error", error
-        #.fail (error) ->
-        #  log "Comment A error", error
 
 Feed
 ----
