@@ -303,10 +303,6 @@ Check for list of questions and files
           $.get '/api/feeds/test3'
       
 
-        note "Feed check", userAdded.then ->
-          fileAdded.then ->
-            questionAdded.then ->
-              $.get '/api/feeds/test3'
 
 
 
