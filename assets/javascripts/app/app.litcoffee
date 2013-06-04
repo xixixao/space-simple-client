@@ -80,6 +80,23 @@ Checking that user must have a correct password.
 Topics
 -------
 
+        ###
+        testUser2 =
+          name: "Philippa"
+          _id: "tutor" 
+          password: "testing"
+          topics: [
+            code: "212"
+            permission: 'w'
+          ]
+
+        tutorAdded = $.post '/api/users', testUser2
+        tutorLoggedIn = tutorAdded.then ->
+          $.post '/api/login', testUser2
+    
+        ###
+
+
 Adding a topic check
 
         topic =
@@ -107,8 +124,14 @@ Adding questions for a file check
           owner: "test3"
           topicCode: "212"
         
-        fileAdded = $.post '/api/files', file
+If the user is logged in then he can add a file
+
+        fileAdded = userAdded.then ->
+            $.post '/api/files', file
         note "File added", fileAdded
+
+
+We then check if we can get a file
 
         note "Getting a file", fileAdded.then ->
           $.get '/api/files/testFile1'
@@ -139,8 +162,12 @@ Getting a question check
 
 
 
+We add a question
+
         questionAdded = $.post '/api/questions', question
         note "Question Check", questionAdded
+
+We then check if we can get a question
 
         note "Getting a question", questionAdded.then ->
           $.get '/api/questions/Q1'
@@ -167,8 +194,14 @@ Getting an answer check
           rank: 5 
           text: "Answer 1"
 
+We add an answer
+
+
         answerAdded = $.post '/api/answers', answer
         note "Answer Check", answerAdded
+
+We then check if we can get an answer
+
         
         note "Getting an answer", answerAdded.then ->
           $.get '/api/answers/A1'
@@ -195,9 +228,14 @@ Getting a comment from a question check
           question: "Q1"
           text: "comment Q"
 
+We add a comment for a question
+
         commentQAdded = $.post '/api/commentsQ', commentQ
         note "Comment Q Check", commentQAdded
         
+We then check if we can get a comment from a question
+
+
         note "Getting a comment from a question", commentQAdded.then ->
           $.get '/api/commentsQ/testcomment1'
 
@@ -222,9 +260,15 @@ Getting a comment from an answer check
           answer: "A1"
           text: "comment A"
 
+We add a comment for an answer
+
         commentAAdded = $.post '/api/commentsA', commentA
         note "Comment A Check", commentAAdded
         
+
+We then check if we can get a comment from an answer
+
+
         note "Getting a comment from an answer", commentAAdded.then ->
           $.get '/api/commentsA/testcomment2'
 
@@ -259,7 +303,10 @@ Check for list of questions and files
           $.get '/api/feeds/test3'
       
 
-
+        note "Feed check", userAdded.then ->
+          fileAdded.then ->
+            questionAdded.then ->
+              $.get '/api/feeds/test3'
 
 
 
