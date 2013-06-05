@@ -160,7 +160,6 @@ Getting a question check
           _id: "Q1" 
           owner: "testOwner"
           filePosition: "100"
-          file: "File1"
           text: "question 1"
 
 
@@ -185,7 +184,6 @@ Getting an answer check
         answer =
           _id: "A1" 
           owner: "testOwner"
-          question: "Q1"
           rank: 5 
           text: "Answer 1"
 
@@ -211,7 +209,6 @@ Getting a comment from a question check
         commentQ =
           _id: "testcomment1" 
           owner: "testOwnerComment"
-          question: "Q1"
           text: "comment Q"
 
 We add a comment for a question
@@ -233,7 +230,6 @@ Getting a comment from an answer check
         commentA =
           _id: "testcomment2" 
           owner: "testOwnerComment"
-          answer: "A1"
           text: "comment A"
 
 We add a comment for an answer
@@ -260,7 +256,6 @@ Check for list of questions and files
           _id: "Q2" 
           owner: "testOwner"
           filePosition: "100"
-          file: "File1"
           text: "question 2"
         
         question2Added = fileAdded.then ->
