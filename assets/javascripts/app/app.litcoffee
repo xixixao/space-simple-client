@@ -62,20 +62,22 @@ Checking that a user that's not signed up cannot log in.
           _id: "test3" 
           password: "backstab"
 
-        #blame "Invalid user", userAdded.then ->
+        #failedLogin = userAdded.then ->
         #  $.post '/api/login', badUser
+        #blame "Invalid user", failedLogin
 
 Checking that user must have a correct password.
 
         forgetfulTestUser = $.extend {}, testUser
         forgetfulTestUser.password = "rubish"
 
-        #blame "Invalid password", userAdded.then ->
+        #failedLogin2 = userAdded.then ->
         #  $.post '/api/login', forgetfulTestUser
+        #blame "Invalid password", failedLogin2
 
 Checking that a user can login (this must be the last login so that we can use it later).
 
-        userLoggedIn = userAdded.then ->
+        userLoggedIn = $.when(userAdded).then ->
           $.post '/api/login', testUser
 
         note "Log in", userLoggedIn
@@ -127,14 +129,14 @@ If the user is logged in then he can add a file
           topicCode: "212"
         
         fileAdded = $.when(userLoggedIn, topicAdded).then ->
-          $.post '/api/files', file
+          $.post '/api/topics/212/files', file
         note "File added", fileAdded
 
 
 We then check if we can get a file
 
         note "Getting a file", fileAdded.then ->
-          $.get '/api/files/File1'
+          $.get '/api/topics/212/files/File1'
 
 Also check that we cannot add a file to someone elses topic
 
@@ -145,8 +147,8 @@ Also check that we cannot add a file to someone elses topic
           owner: "test3"
           topicCode: "reallyWrong"
 
-        blame "File permission", $.when(userLoggedIn, topicAdded).then ->
-          $.post '/api/files', badFile
+        blame "Bad file permission", $.when(userLoggedIn, topicAdded).then ->
+          $.post '/api/topics/reallyWrong/files', badFile
 
 Question
 --------
@@ -166,13 +168,13 @@ Getting a question check
 We add a question
 
         questionAdded = fileAdded.then -> 
-          $.post '/api/questions', question
+          $.post '/api/topics/212/files/File1/questions', question
         note "Question Check", questionAdded
 
 We then check if we can get a question
 
         note "Getting a question", questionAdded.then ->
-          $.get '/api/questions/Q1'
+          $.get '/api/topics/212/files/File1/questions/Q1'
 
 
 ------------------------------------
@@ -220,7 +222,6 @@ We add a comment for a question
         
 We then check if we can get a comment from a question
 
-
         note "Getting a comment from a question", commentQAdded.then ->
           $.get '/api/commentsQ/testcomment1'
 
@@ -260,7 +261,8 @@ Check for list of questions and files
           file: "File1"
           text: "question 2"
         
-        question2Added = $.post '/api/questions', question2
+        question2Added = fileAdded.then ->
+          $.post '/api/questions', question2
         note "Question 2 Check", question2Added
 
         note "Getting question 2", question2Added.then ->
