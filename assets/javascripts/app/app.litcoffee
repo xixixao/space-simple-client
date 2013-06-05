@@ -44,7 +44,7 @@ First we need to sign a user up.
         userAdded = $.post '/api/users', testUser
         note "Signup Check", userAdded
 
-We then check that we can't make a duplicate sign up.
+We then check that we cant make a duplicate sign up.
 
         note "Duplicate Check", userAdded.then ->
           $.post '/api/users', testUser
@@ -55,7 +55,7 @@ We then check that we can't make a duplicate sign up.
 Login check
 -----------
 
-Checking that a user that's not signed up cannot log in.
+Checking that a user thats not signed up cannot log in.
 
         badUser =
           name: "rogue"
@@ -115,6 +115,7 @@ Getting a topic check
 
         note "Getting a topic", topicAdded.then ->
           $.get '/api/topics/212'
+
 
 File
 ----
@@ -250,8 +251,6 @@ We then check if we can get a comment from an answer
 
 Check for list of questions and files
 
-
-
         question2 =
           _id: "Q2" 
           owner: "testOwner"
@@ -270,6 +269,24 @@ Check for list of questions and files
       
 Events
 ------
+
+        topic1 =
+          name: "OS"
+          _id: "211"
+
+        topicAdded1 = $.post '/api/topics', topic1
+        note "Topic addition", topicAdded1
+
+        file1 =
+          name: "file"
+          _id: "File2" 
+          path: "/home/app"
+          owner: "test3"
+          topicCode: "211"
+        
+        fileAdded1 = $.when(userLoggedIn, topicAdded1).then ->
+          $.post '/api/topics/212/files', file1
+        note "File added 1", fileAdded1
 
         note "Event list", fileAdded.then ->
           $.get '/api/events'
