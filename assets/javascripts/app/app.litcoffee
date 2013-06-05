@@ -193,14 +193,14 @@ We add an answer
 
 
         answerAdded = questionAdded.then ->
-          $.post '/api/answers', answer
+          $.post '/api/topics/212/files/File1/questions/Q1/answers', answer
         note "Answer Check", answerAdded
 
 We then check if we can get an answer
 
         
         note "Getting an answer", answerAdded.then ->
-          $.get '/api/answers/A1'
+          $.get '/api/topics/212/files/File1/questions/Q1/answers/A1'
 
 
 ---------------------------------------
@@ -217,13 +217,13 @@ Getting a comment from a question check
 We add a comment for a question
 
         commentQAdded = questionAdded.then ->
-          $.post '/api/commentsQ', commentQ
+          $.post '/api/topics/212/files/File1/questions/Q1/comments', commentQ
         note "Comment Q Check", commentQAdded
         
 We then check if we can get a comment from a question
 
         note "Getting a comment from a question", commentQAdded.then ->
-          $.get '/api/commentsQ/testcomment1'
+          $.get '/api/topics/212/files/File1/questions/Q1/comments/testcomment1'
 
 ---------------------------------------
 Adding a comment to an answer
@@ -239,7 +239,7 @@ Getting a comment from an answer check
 We add a comment for an answer
 
         commentAAdded = answerAdded.then ->
-          $.post '/api/commentsA', commentA
+          $.post '/api/topics/212/files/File1/questions/Q1/answers/A1/comments', commentA
         note "Comment A Check", commentAAdded
         
 
@@ -247,12 +247,14 @@ We then check if we can get a comment from an answer
 
 
         note "Getting a comment from an answer", commentAAdded.then ->
-          $.get '/api/commentsA/testcomment2'
+          $.get '/api/topics/212/files/File1/questions/Q1/answers/A1/comments/testcomment2'
 
 
 ----
 
 Check for list of questions and files
+
+
 
         question2 =
           _id: "Q2" 
@@ -262,11 +264,11 @@ Check for list of questions and files
           text: "question 2"
         
         question2Added = fileAdded.then ->
-          $.post '/api/questions', question2
+          $.post '/api/topics/212/files/File1/questions', question2
         note "Question 2 Check", question2Added
 
         note "Getting question 2", question2Added.then ->
-          $.get '/api/questions/Q2'
+          $.get '/api/topics/212/files/File1/questions/Q2'
 
         note "Feed check", $.when(questionAdded, question2Added).then ->
           $.get '/api/feeds/test3'
