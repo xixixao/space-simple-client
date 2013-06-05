@@ -52,6 +52,8 @@ We then check that we cant make a duplicate sign up.
           # $.post '/api/users/test3', user, (data, status) ->
           #   log "Adding a topic", "status", status, "data", data
 
+
+
 Login check
 -----------
 
@@ -81,6 +83,24 @@ Checking that a user can login (this must be the last login so that we can use i
           $.post '/api/login', testUser
 
         note "Log in", userLoggedIn
+
+Update user info
+----------------
+
+        testUserUpdate =
+          name: "test1"
+          _id: "test3" 
+          password: "testing"
+          topics: [
+            code: "212"
+            permission: 'w'
+          ]
+
+        userUpdated = $.when(userAdded, userLoggedIn).then ->
+          $.post '/api/users/test3', testUserUpdate
+        note "Update Check", userUpdated 
+
+
 
 Topics
 -------
