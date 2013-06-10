@@ -40,66 +40,26 @@ First we need to sign a user up.
             code: "212"
             permission: 'w'
           ]
+          email: "testUser@test.com"
+          facebook: "test@facebook.com"
 
         userAdded = $.post '/api/users', testUser
         note "Signup Check", userAdded
 
+Getting user
+
+        #note "Getting a user", userAdded.then ->
+        #  $.get '/api/users/test3'
+
 We then check that we cant make a duplicate sign up.
 
-        note "Duplicate Check", userAdded.then ->
-          $.post '/api/users', testUser
+        #note "Duplicate Check", userAdded.then ->
+        #  $.post '/api/users', testUser
+
+
 
           # $.post '/api/users/test3', user, (data, status) ->
           #   log "Adding a topic", "status", status, "data", data
-
-
-
-Login check
------------
-
-Checking that a user thats not signed up cannot log in.
-
-        badUser =
-          name: "rogue"
-          _id: "test3" 
-          password: "backstab"
-
-        #failedLogin = userAdded.then ->
-        #  $.post '/api/login', badUser
-        #blame "Invalid user", failedLogin
-
-Checking that user must have a correct password.
-
-        forgetfulTestUser = $.extend {}, testUser
-        forgetfulTestUser.password = "rubish"
-
-        #failedLogin2 = userAdded.then ->
-        #  $.post '/api/login', forgetfulTestUser
-        #blame "Invalid password", failedLogin2
-
-Checking that a user can login (this must be the last login so that we can use it later).
-
-        userLoggedIn = $.when(userAdded).then ->
-          $.post '/api/login', testUser
-
-        note "Log in", userLoggedIn
-
-Update user info
-----------------
-
-        testUserUpdate =
-          name: "test1"
-          _id: "test3" 
-          password: "testing"
-          topics: [
-            code: "212"
-            permission: 'w'
-          ]
-
-        userUpdated = $.when(userAdded, userLoggedIn).then ->
-          $.post '/api/users/test3', testUserUpdate
-        note "Update Check", userUpdated 
-
 
 
 Topics
@@ -127,6 +87,7 @@ Adding a topic check
         topic =
           name: "NAC"
           _id: "212"
+          types: ["Notes", "tutorial"]
 
         topicAdded = $.post '/api/topics', topic
         note "Topic addition", topicAdded
@@ -135,6 +96,56 @@ Getting a topic check
 
         note "Getting a topic", topicAdded.then ->
           $.get '/api/topics/212'
+
+
+Login check
+-----------
+
+Checking that a user thats not signed up cannot log in.
+
+        badUser =
+          name: "rogue"
+          _id: "test3" 
+          password: "backstab"
+
+        #failedLogin = userAdded.then ->
+        #  $.post '/api/login', badUser
+        #blame "Invalid user", failedLogin
+
+Checking that user must have a correct password.
+
+        forgetfulTestUser = $.extend {}, testUser
+        forgetfulTestUser.password = "rubish"
+
+        #failedLogin2 = userAdded.then ->
+        #  $.post '/api/login', forgetfulTestUser
+        #blame "Invalid password", failedLogin2
+
+Checking that a user can login (this must be the last login so that we can use it later).
+
+        userLoggedIn = $.when(userAdded, topicAdded).then ->
+          $.post '/api/login', testUser
+
+        note "Log in", userLoggedIn
+
+Update user info
+----------------
+
+        testUserUpdate =
+          name: "test1"
+          _id: "test3" 
+          password: "testing"
+          topics: [
+            code: "212"
+            permission: 'w'
+          ]
+
+        userUpdated = $.when(userAdded, userLoggedIn).then ->
+          $.post '/api/users/test3', testUserUpdate
+        note "Update Check", userUpdated 
+
+
+
 
 
 File
@@ -148,6 +159,7 @@ If the user is logged in then he can add a file
           path: "/home/app"
           owner: "test3"
           topicCode: "212"
+          type: "tutorial"
         
         fileAdded = $.when(userLoggedIn, topicAdded).then ->
           $.post '/api/topics/212/files', file
@@ -303,6 +315,7 @@ Events
           path: "/home/app"
           owner: "test3"
           topicCode: "211"
+          type: "solution"
         
         fileAdded1 = $.when(userLoggedIn, topicAdded1).then ->
           $.post '/api/topics/212/files', file1
