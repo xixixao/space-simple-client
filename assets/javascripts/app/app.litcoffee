@@ -190,9 +190,8 @@ Adding a question
 Getting a question check
 
         question =
-          _id: "Q1" 
           owner: "test3"
-          filePosition: "100"
+          position: "100"
           text: "question 1"
 
 
@@ -205,8 +204,8 @@ We add a question
 
 We then check if we can get a question
 
-        note "Getting a question", questionAdded.then ->
-          $.get '/api/topics/212/files/File1/questions/Q1'
+        note "Getting a question", questionAdded.then (questionId) ->
+          $.get "/api/topics/212/files/File1/questions/#{questionId}"
 
 
 ------------------------------------
@@ -215,7 +214,6 @@ Getting an answer check
 ------------------------------------
 
         answer =
-          _id: "A1" 
           owner: "test3"
           rank: 5 
           text: "Answer 1"
@@ -223,15 +221,15 @@ Getting an answer check
 We add an answer
 
 
-        answerAdded = questionAdded.then ->
-          $.post '/api/topics/212/files/File1/questions/Q1/answers', answer
+        answerAdded = questionAdded.then (questionId) ->
+          $.post "/api/topics/212/files/File1/questions/#{questionId}/answers", answer
         note "Answer Check", answerAdded
 
 We then check if we can get an answer
 
         
-        note "Getting an answer", answerAdded.then ->
-          $.get '/api/topics/212/files/File1/questions/Q1/answers/A1'
+        note "Getting an answer", $.when(answerAdded, questionAdded).then (answer, question) ->
+          $.get "/api/topics/212/files/File1/questions/#{question[0]}/answers/#{answer[0]}"
 
 
 ---------------------------------------
@@ -240,20 +238,20 @@ Getting a comment from a question check
 ---------------------------------------
 
         commentQ =
-          _id: "testcomment1" 
           owner: "test3"
           text: "comment Q"
 
 We add a comment for a question
 
-        commentQAdded = questionAdded.then ->
-          $.post '/api/topics/212/files/File1/questions/Q1/comments', commentQ
+        commentQAdded = questionAdded.then (questionId) ->
+          $.post "/api/topics/212/files/File1/questions/#{questionId}/comments", commentQ
         note "Comment Q Check", commentQAdded
         
 We then check if we can get a comment from a question
 
-        note "Getting a comment from a question", commentQAdded.then ->
-          $.get '/api/topics/212/files/File1/questions/Q1/comments/testcomment1'
+        note "Getting a comment from a question", $.when(commentQAdded, questionAdded).then (comment, question) ->
+          console.log question[0]
+          $.get "/api/topics/212/files/File1/questions/#{question[0]}/comments/#{comment[0]}"
 
 ---------------------------------------
 Adding a comment to an answer
@@ -261,22 +259,20 @@ Getting a comment from an answer check
 ---------------------------------------
 
         commentA =
-          _id: "testcomment2" 
           owner: "test3"
           text: "comment A"
 
 We add a comment for an answer
 
-        commentAAdded = answerAdded.then ->
-          $.post '/api/topics/212/files/File1/questions/Q1/answers/A1/comments', commentA
+        commentAAdded = $.when(answerAdded, questionAdded).then (answer, question) ->
+          $.post "/api/topics/212/files/File1/questions/#{question[0]}/answers/#{answer[0]}/comments", commentA
         note "Comment A Check", commentAAdded
         
 
 We then check if we can get a comment from an answer
 
-
-        note "Getting a comment from an answer", commentAAdded.then ->
-          $.get '/api/topics/212/files/File1/questions/Q1/answers/A1/comments/testcomment2'
+        note "Getting a comment from an answer", $.when(commentAAdded, answerAdded, questionAdded).then (comment, answer, question) ->
+          $.get "/api/topics/212/files/File1/questions/#{question[0]}/answers/#{answer[0]}/comments/#{comment[0]}"
 
 
 ----
@@ -284,9 +280,8 @@ We then check if we can get a comment from an answer
 Check for list of questions and files
 
         question2 =
-          _id: "Q2" 
           owner: "test3"
-          filePosition: "100"
+          position: "100"
           text: "question 2"
         
         question2Added = fileAdded.then ->
