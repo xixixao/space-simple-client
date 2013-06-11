@@ -191,7 +191,7 @@ Getting a question check
 
         question =
           _id: "Q1" 
-          owner: "testOwner"
+          owner: "test3"
           filePosition: "100"
           text: "question 1"
 
@@ -216,7 +216,7 @@ Getting an answer check
 
         answer =
           _id: "A1" 
-          owner: "testOwner"
+          owner: "test3"
           rank: 5 
           text: "Answer 1"
 
@@ -241,7 +241,7 @@ Getting a comment from a question check
 
         commentQ =
           _id: "testcomment1" 
-          owner: "testOwnerComment"
+          owner: "test3"
           text: "comment Q"
 
 We add a comment for a question
@@ -262,7 +262,7 @@ Getting a comment from an answer check
 
         commentA =
           _id: "testcomment2" 
-          owner: "testOwnerComment"
+          owner: "test3"
           text: "comment A"
 
 We add a comment for an answer
@@ -285,7 +285,7 @@ Check for list of questions and files
 
         question2 =
           _id: "Q2" 
-          owner: "testOwner"
+          owner: "test3"
           filePosition: "100"
           text: "question 2"
         
