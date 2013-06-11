@@ -124,7 +124,7 @@ Checking that user must have a correct password.
 Checking that a user can login (this must be the last login so that we can use it later).
 
         userLoggedIn = $.when(userAdded, topicAdded).then ->
-          $.post '/api/login', testUser
+          $.post '/api/username', testUser
 
         note "Log in", userLoggedIn
 
@@ -134,15 +134,20 @@ Update user info
         testUserUpdate =
           name: "test1"
           _id: "test3" 
-          password: "testing"
+          password: "Update"
           topics: [
             code: "212"
             permission: 'w'
           ]
+          email: "testUser@test.com"
+          facebook: "test@facebook.com"
 
         userUpdated = $.when(userAdded, userLoggedIn).then ->
           $.post '/api/users/test3', testUserUpdate
         note "Update Check", userUpdated 
+
+        note "Getting a user", userUpdated.then ->
+          $.get '/api/users/test3'
 
 
 
@@ -320,6 +325,22 @@ Events
           $.get '/api/events'
 
 
+Ranking
+-------
+
+        voteUp = $.when(answerAdded, questionAdded).then (answer, question) ->
+          $.post "/api/topics/212/files/File1/questions/#{question[0]}/answers/#{answer[0]}/voteUp/test3", commentA
+        note "Vote up", voteUp
+
+        note "votes for", $.when(voteUp, answerAdded, questionAdded).then (vote, answer, question) ->
+          $.get "api/topics/212/files/File1/questions/#{question[0]}/answers/#{answer[0]}/voteUp"
+
+        voteDown = $.when(answerAdded, questionAdded).then (answer, question) ->
+          $.post "/api/topics/212/files/File1/questions/#{question[0]}/answers/#{answer[0]}/voteDown/test3", commentA
+        note "Vote down", voteUp
+
+        note "votes against", $.when(voteDown, answerAdded, questionAdded).then (vote, answer, question) ->
+          $.get "api/topics/212/files/File1/questions/#{question[0]}/answers/#{answer[0]}/voteDown"
 
         
           
