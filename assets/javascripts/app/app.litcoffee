@@ -127,6 +127,7 @@ Checking that a user can login (this must be the last login so that we can use i
           $.post '/api/username', testUser
 
         note "Log in", userLoggedIn
+        
 
 Update user info
 ----------------
@@ -134,17 +135,18 @@ Update user info
         testUserUpdate =
           name: "test1"
           _id: "test3" 
-          password: "Update"
+          password: "testing"
           topics: [
             code: "212"
             permission: 'w'
           ]
-          email: "testUser@test.com"
+          email: "Update@test.com"
           facebook: "test@facebook.com"
 
         userUpdated = $.when(userAdded, userLoggedIn).then ->
           $.post '/api/users/test3', testUserUpdate
         note "Update Check", userUpdated 
+
 
         note "Getting a user", userUpdated.then ->
           $.get '/api/users/test3'
@@ -155,6 +157,9 @@ Update user info
 
 File
 ----
+
+        
+        
 
 If the user is logged in then he can add a file
 
@@ -284,20 +289,20 @@ We then check if we can get a comment from an answer
 
 Check for list of questions and files
 
-        question2 =
-          owner: "test3"
-          position: "100"
-          text: "question 2"
+        # question2 =
+        #   owner: "test3"
+        #   position: "100"
+        #   text: "question 2"
         
-        question2Added = fileAdded.then ->
-          $.post '/api/topics/212/files/File1/questions', question2
-        note "Question 2 Check", question2Added
+        # question2Added = fileAdded.then ->
+        #   $.post '/api/topics/212/files/File1/questions', question2
+        # note "Question 2 Check", question2Added
 
-        note "Getting question 2", question2Added.then ->
-          $.get '/api/topics/212/files/File1/questions/Q2'
+        # note "Getting question 2", question2Added.then ->
+        #   $.get '/api/topics/212/files/File1/questions/Q2'
 
-        note "Feed check", $.when(questionAdded, question2Added).then ->
-          $.get '/api/feeds/test3'
+        # note "Feed check", $.when(questionAdded, question2Added).then ->
+        #   $.get '/api/feeds/test3'
       
 Events
 ------
@@ -330,19 +335,23 @@ Ranking
 
         voteUp = $.when(answerAdded, questionAdded).then (answer, question) ->
           $.post "/api/topics/212/files/File1/questions/#{question[0]}/answers/#{answer[0]}/voteUp/test3", commentA
-        note "Vote up", voteUp
+        note "Vote up check", voteUp
 
-        note "votes for", $.when(voteUp, answerAdded, questionAdded).then (vote, answer, question) ->
+        voteUp1 = $.when(answerAdded, questionAdded).then (answer, question) ->
+          $.post "/api/topics/212/files/File1/questions/#{question[0]}/answers/#{answer[0]}/voteUp/test", commentA
+        note "Vote up check", voteUp1
+
+        note "Getting votes for", $.when(voteUp, answerAdded, questionAdded).then (vote, answer, question) ->
           $.get "api/topics/212/files/File1/questions/#{question[0]}/answers/#{answer[0]}/voteUp"
 
         voteDown = $.when(answerAdded, questionAdded).then (answer, question) ->
           $.post "/api/topics/212/files/File1/questions/#{question[0]}/answers/#{answer[0]}/voteDown/test3", commentA
-        note "Vote down", voteUp
+        note "Vote down check", voteDown
 
-        note "votes against", $.when(voteDown, answerAdded, questionAdded).then (vote, answer, question) ->
+        note "Getting votes against", $.when(voteDown, answerAdded, questionAdded).then (vote, answer, question) ->
           $.get "api/topics/212/files/File1/questions/#{question[0]}/answers/#{answer[0]}/voteDown"
 
-        
+      
           
 
 
