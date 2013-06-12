@@ -3,7 +3,11 @@ Client
 
 Uses jQuery to make simple requests to our Cloud api.
 
-    define ['jquery', './utilities'], ($, {log, note, blame}) ->
+    define [
+      'jquery'
+      './utilities'
+      'vendor/jquery-whenAllAll'
+    ], ($, {log, note, blame}) ->
 
       $.put = (url, data, success) ->
         $.ajax {url, data, success}
@@ -48,12 +52,12 @@ First we need to sign a user up.
 
 Getting user
 
-        #note "Getting a user", userAdded.then ->
+        #note "Getting a user", userAdded.always ->
         #  $.get '/api/users/test3'
 
 We then check that we cant make a duplicate sign up.
 
-        #note "Duplicate Check", userAdded.then ->
+        #note "Duplicate Check", userAdded.always ->
         #  $.post '/api/users', testUser
 
 
@@ -76,7 +80,7 @@ Topics
           ]
 
         tutorAdded = $.post '/api/users', testUser2
-        tutorLoggedIn = tutorAdded.then ->
+        tutorLoggedIn = tutorAdded.always ->
           $.post '/api/login', testUser2
     
         ###
@@ -94,7 +98,7 @@ Adding a topic check
 
 Getting a topic check
 
-        note "Getting a topic", topicAdded.then ->
+        note "Getting a topic", topicAdded.always ->
           $.get '/api/topics/212'
 
 
@@ -108,7 +112,7 @@ Checking that a user thats not signed up cannot log in.
           _id: "test3" 
           password: "backstab"
 
-        #failedLogin = userAdded.then ->
+        #failedLogin = userAdded.always ->
         #  $.post '/api/login', badUser
         #blame "Invalid user", failedLogin
 
@@ -117,13 +121,13 @@ Checking that user must have a correct password.
         forgetfulTestUser = $.extend {}, testUser
         forgetfulTestUser.password = "rubish"
 
-        #failedLogin2 = userAdded.then ->
+        #failedLogin2 = userAdded.always ->
         #  $.post '/api/login', forgetfulTestUser
         #blame "Invalid password", failedLogin2
 
 Checking that a user can login (this must be the last login so that we can use it later).
 
-        userLoggedIn = $.when(userAdded, topicAdded).then ->
+        userLoggedIn = $.whenAll(userAdded, topicAdded).always ->
           $.post '/api/username', testUser
 
         note "Log in", userLoggedIn
@@ -143,12 +147,12 @@ Update user info
           email: "Update@test.com"
           facebook: "test@facebook.com"
 
-        userUpdated = $.when(userAdded, userLoggedIn).then ->
+        userUpdated = $.whenAll(userAdded, userLoggedIn).always ->
           $.post '/api/users/test3', testUserUpdate
         note "Update Check", userUpdated 
 
 
-        note "Getting a user", userUpdated.then ->
+        note "Getting a user", userUpdated.always ->
           $.get '/api/users/test3'
 
 
@@ -171,14 +175,14 @@ If the user is logged in then he can add a file
           topicCode: "212"
           type: "tutorial"
         
-        fileAdded = $.when(userLoggedIn, topicAdded).then ->
+        fileAdded = $.whenAll(userLoggedIn, topicAdded).always ->
           $.post '/api/topics/212/files', file
         note "File added", fileAdded
 
 
 We then check if we can get a file
 
-        note "Getting a file", fileAdded.then ->
+        note "Getting a file", fileAdded.always ->
           $.get '/api/topics/212/files/File1'
 
 Also check that we cannot add a file to someone elses topic
@@ -190,7 +194,7 @@ Also check that we cannot add a file to someone elses topic
           owner: "test3"
           topicCode: "reallyWrong"
 
-        blame "Bad file permission", $.when(userLoggedIn, topicAdded).then ->
+        blame "Bad file permission", $.whenAll(userLoggedIn, topicAdded).always ->
           $.post '/api/topics/reallyWrong/files', badFile
 
 Question
@@ -208,13 +212,13 @@ Getting a question check
 
 We add a question
 
-        questionAdded = fileAdded.then -> 
+        questionAdded = fileAdded.always -> 
           $.post '/api/topics/212/files/File1/questions', question
         note "Question Check", questionAdded
 
 We then check if we can get a question
 
-        note "Getting a question", questionAdded.then (questionId) ->
+        note "Getting a question", questionAdded.always (questionId) ->
           $.get "/api/topics/212/files/File1/questions/#{questionId}"
 
 
@@ -231,14 +235,14 @@ Getting an answer check
 We add an answer
 
 
-        answerAdded = questionAdded.then (questionId) ->
+        answerAdded = questionAdded.always (questionId) ->
           $.post "/api/topics/212/files/File1/questions/#{questionId}/answers", answer
         note "Answer Check", answerAdded
 
 We then check if we can get an answer
 
         
-        note "Getting an answer", $.when(answerAdded, questionAdded).then (answer, question) ->
+        note "Getting an answer", $.whenAll(answerAdded, questionAdded).always (answer, question) ->
           $.get "/api/topics/212/files/File1/questions/#{question[0]}/answers/#{answer[0]}"
 
 
@@ -253,13 +257,13 @@ Getting a comment from a question check
 
 We add a comment for a question
 
-        commentQAdded = questionAdded.then (questionId) ->
+        commentQAdded = questionAdded.always (questionId) ->
           $.post "/api/topics/212/files/File1/questions/#{questionId}/comments", commentQ
         note "Comment Q Check", commentQAdded
         
 We then check if we can get a comment from a question
 
-        note "Getting a comment from a question", $.when(commentQAdded, questionAdded).then (comment, question) ->
+        note "Getting a comment from a question", $.whenAll(commentQAdded, questionAdded).always (comment, question) ->
           console.log question[0]
           $.get "/api/topics/212/files/File1/questions/#{question[0]}/comments/#{comment[0]}"
 
@@ -274,14 +278,14 @@ Getting a comment from an answer check
 
 We add a comment for an answer
 
-        commentAAdded = $.when(answerAdded, questionAdded).then (answer, question) ->
+        commentAAdded = $.whenAll(answerAdded, questionAdded).always (answer, question) ->
           $.post "/api/topics/212/files/File1/questions/#{question[0]}/answers/#{answer[0]}/comments", commentA
         note "Comment A Check", commentAAdded
         
 
 We then check if we can get a comment from an answer
 
-        note "Getting a comment from an answer", $.when(commentAAdded, answerAdded, questionAdded).then (comment, answer, question) ->
+        note "Getting a comment from an answer", $.whenAll(commentAAdded, answerAdded, questionAdded).always (comment, answer, question) ->
           $.get "/api/topics/212/files/File1/questions/#{question[0]}/answers/#{answer[0]}/comments/#{comment[0]}"
 
 
@@ -294,14 +298,14 @@ Check for list of questions and files
         #   position: "100"
         #   text: "question 2"
         
-        # question2Added = fileAdded.then ->
+        # question2Added = fileAdded.always ->
         #   $.post '/api/topics/212/files/File1/questions', question2
         # note "Question 2 Check", question2Added
 
-        # note "Getting question 2", question2Added.then ->
+        # note "Getting question 2", question2Added.always ->
         #   $.get '/api/topics/212/files/File1/questions/Q2'
 
-        # note "Feed check", $.when(questionAdded, question2Added).then ->
+        # note "Feed check", $.whenAll(questionAdded, question2Added).always ->
         #   $.get '/api/feeds/test3'
       
 Events
@@ -322,33 +326,33 @@ Events
           topicCode: "211"
           type: "solution"
         
-        fileAdded1 = $.when(userLoggedIn, topicAdded1).then ->
+        fileAdded1 = $.whenAll(userLoggedIn, topicAdded1).always ->
           $.post '/api/topics/212/files', file1
         note "File added 1", fileAdded1
 
-        note "Event list", fileAdded.then ->
+        note "Event list", fileAdded.always ->
           $.get '/api/events'
 
 
 Ranking
 -------
 
-        voteUp = $.when(answerAdded, questionAdded).then (answer, question) ->
+        voteUp = $.whenAll(answerAdded, questionAdded).always (answer, question) ->
           $.post "/api/topics/212/files/File1/questions/#{question[0]}/answers/#{answer[0]}/voteUp/test3", commentA
         note "Vote up check", voteUp
 
-        voteUp1 = $.when(answerAdded, questionAdded).then (answer, question) ->
+        voteUp1 = $.whenAll(answerAdded, questionAdded).always (answer, question) ->
           $.post "/api/topics/212/files/File1/questions/#{question[0]}/answers/#{answer[0]}/voteUp/test", commentA
         note "Vote up check", voteUp1
 
-        note "Getting votes for", $.when(voteUp, answerAdded, questionAdded).then (vote, answer, question) ->
+        note "Getting votes for", $.whenAll(voteUp, answerAdded, questionAdded).always (vote, answer, question) ->
           $.get "api/topics/212/files/File1/questions/#{question[0]}/answers/#{answer[0]}/voteUp"
 
-        voteDown = $.when(answerAdded, questionAdded).then (answer, question) ->
+        voteDown = $.whenAll(answerAdded, questionAdded).always (answer, question) ->
           $.post "/api/topics/212/files/File1/questions/#{question[0]}/answers/#{answer[0]}/voteDown/test3", commentA
         note "Vote down check", voteDown
 
-        note "Getting votes against", $.when(voteDown, answerAdded, questionAdded).then (vote, answer, question) ->
+        note "Getting votes against", $.whenAll(voteDown, answerAdded, questionAdded).always (vote, answer, question) ->
           $.get "api/topics/212/files/File1/questions/#{question[0]}/answers/#{answer[0]}/voteDown"
 
       
