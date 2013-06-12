@@ -348,8 +348,11 @@ Ranking
           $.post "/api/topics/212/files/File1/questions/#{question[0]}/answers/#{answer[0]}/voteDown/test3", commentA
         note "Vote down check", voteDown
 
-        note "Getting votes against", $.when(voteDown, answerAdded, questionAdded).then (vote, answer, question) ->
-          $.get "api/topics/212/files/File1/questions/#{question[0]}/answers/#{answer[0]}/voteDown"
+        #note "Getting votes against", $.when(voteDown, answerAdded, questionAdded).then (vote, answer, question) ->
+        #  $.get "api/topics/212/files/File1/questions/#{question[0]}/answers/#{answer[0]}/voteDown"
+
+        note "Getting votes for after a vote down", $.when(voteUp,voteDown, answerAdded, questionAdded).then (voteFor, voteDown, answer, question) ->
+          $.get "api/topics/212/files/File1/questions/#{question[0]}/answers/#{answer[0]}/voteUp"
 
       
           
