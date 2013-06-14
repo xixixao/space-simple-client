@@ -223,6 +223,9 @@ We then check if we can get a question
         note "Getting a question", questionAdded.then (questionId) ->
           $.get "/api/topics/212/files/File1/questions/#{questionId}"
 
+        note "Getting all questions", questionAdded.then ->
+          $.get "/api/topics/212/files/File1/questions"
+
 
 ------------------------------------
 Adding an answer
@@ -247,6 +250,9 @@ We then check if we can get an answer
         note "Getting an answer", $.when(answerAdded, questionAdded).then (answer, question) ->
           $.get "/api/topics/212/files/File1/questions/#{question[0]}/answers/#{answer[0]}"
 
+        note "Getting all answers", $.when(answerAdded, questionAdded).then (answer, question) ->
+          $.get "/api/topics/212/files/File1/questions/#{question[0]}/answers"
+
 
 ---------------------------------------
 Adding a comment to a question
@@ -262,7 +268,7 @@ We add a comment for a question
         commentQAdded = questionAdded.then (questionId) ->
           $.post "/api/topics/212/files/File1/questions/#{questionId}/comments", commentQ
         note "Comment Q Check", commentQAdded
-        
+
 We then check if we can get a comment from a question
 
         note "Getting a comment from a question", $.when(commentQAdded, questionAdded).then (comment, question) ->
